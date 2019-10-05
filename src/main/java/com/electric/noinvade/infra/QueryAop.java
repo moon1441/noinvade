@@ -50,7 +50,12 @@ public class QueryAop {
         Method method = signature.getMethod();
         InfluxQuery annotation = method.getAnnotation(InfluxQuery.class);
         if(annotation!=null){
-            QueryResult queryResult = influxDB.query(new Query(annotation.value()));
+            String sql =  annotation.value();
+            int paramIndex=0;
+            while(sql.indexOf("?")>0){
+                sql=sql.replace("?",String.valueOf(pjp.getArgs()[paramIndex]));
+            }
+            QueryResult queryResult = influxDB.query(new Query(sql));
             InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
             if(method.getReturnType() == java.util.List.class) {
                 // 如果是List类型，得到其Generic的类型
