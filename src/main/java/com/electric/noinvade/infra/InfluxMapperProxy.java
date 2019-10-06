@@ -1,59 +1,45 @@
 package com.electric.noinvade.infra;
 
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Properties;
 
-@Aspect
-@Component
-public class QueryAop {
+public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
 
     private InfluxDB influxDB;
 
-    @PostConstruct
-    public  void init() throws IOException {
+    {
         Properties prop = new Properties();
-
         InputStream in = this.getClass().getClassLoader().getResourceAsStream(
                 "influxdb.properties");
-        prop.load(in);
+        try {
+            prop.load(in);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         influxDB = InfluxDBFactory.connect(prop.getProperty("url"));
         influxDB.setDatabase(prop.getProperty("db"));
     }
-
-    @Pointcut("within(com.electric.noinvade.repositry.*)")
-    public void pointcut(){}
-
-    @Pointcut("execution(public * *(..))")
-    public void operation(){}
-
-    @Around(value="pointcut()&&operation()")
-    public Object doAround(ProceedingJoinPoint pjp) throws Throwable{
-        MethodSignature signature = (MethodSignature) pjp.getSignature();
-        Method method = signature.getMethod();
+    @Override
+    public Object invoke(Object o, Method method, Object[] args) throws Throwable {
         InfluxQuery annotation = method.getAnnotation(InfluxQuery.class);
         if(annotation!=null){
             String sql =  annotation.value();
             int paramIndex=0;
             while(sql.indexOf("?")>0){
-                sql=sql.replace("?",String.valueOf(pjp.getArgs()[paramIndex]));
+                sql=sql.replace("?",String.valueOf(args[paramIndex]));
             }
             QueryResult queryResult = influxDB.query(new Query(sql));
             InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
@@ -69,7 +55,7 @@ public class QueryAop {
                     return result;
                 }
             }else {
-                List<?> result = resultMapper.toPOJO(queryResult, method.getDeclaringClass());
+                List<?> result = resultMapper.toPOJO(queryResult, method.getReturnType());
                 return result;
             }
         }

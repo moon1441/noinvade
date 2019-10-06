@@ -5,16 +5,18 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.List;
 
 @SpringBootApplication
-public class DemoApplication {
+@MapperScan("com.electric.noinvade.repositry.mysql")
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(Application.class, args);
 //		InfluxDB influxDB = InfluxDBFactory.connect("http://10.9.8.88:8086");
 //		String dbName = "nilm";
 //		influxDB.setDatabase(dbName);

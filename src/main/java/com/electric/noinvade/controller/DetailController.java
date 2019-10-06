@@ -21,31 +21,31 @@ public class DetailController {
 
     //设备电量分解
     @RequestMapping(value="/device_power_sum",method = RequestMethod.GET)
-    public List<DevicePowerInfoVO> getAllDevicePowerSum(long start, long end,String buildingId,String houseId){
+    public List<DevicePowerInfoVO> getAllDevicePowerSum(long start, long end,String houseId){
         return null;
     }
 
     //设备实时功率图表
     @RequestMapping(value="/device_power_detail",method = RequestMethod.GET)
-    public List<DevicePowerInfoVO> getAllDevicePowerDetail(long start, long end,String buildingId,String houseId){
+    public List<DevicePowerInfoVO> getAllDevicePowerDetail(long start, long end,String houseId){
         return null;
     }
 
     //事件列表
-    @RequestMapping(value="/device_power_detail",method = RequestMethod.GET)
-    public List<AlarmInfoVO> getAllDevicePowerDetail(int pagenum, int pagesize,String buildingId,String houseId){
+    @RequestMapping(value="/device_event_detail",method = RequestMethod.GET)
+    public List<AlarmInfoVO> getAllDeviceEventDetail(int pagenum, int pagesize,String houseId){
         return null;
     }
 
     //设备白名单
     @RequestMapping(value="/device_auth_info",method = RequestMethod.GET)
-    public List<Integer> getAllDeviceAuth(String buildingId,String houseId){
+    public List<Integer> getAllDeviceAuth(String houseId){
         return null;
     }
 
     //设备加白
     @RequestMapping(value="/device_auth",method = RequestMethod.POST)
-    public List<Integer> getAllDeviceAuth(String buildingId,String houseId,int type){
+    public List<Integer> getAllDeviceAuth(String houseId,int type){
         return null;
     }
 }
