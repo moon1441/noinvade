@@ -39,7 +39,8 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
             String sql =  annotation.value();
             int paramIndex=0;
             while(sql.indexOf("?")>0){
-                sql=sql.replace("?",String.valueOf(args[paramIndex]));
+                sql=sql.replaceFirst("\\?",String.valueOf(args[paramIndex]));
+                paramIndex++;
             }
             QueryResult queryResult = influxDB.query(new Query(sql));
             InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();

@@ -8,17 +8,17 @@ import java.time.Instant;
 
 @Measurement(name = "raw_aggr_10s")
 @Data
-public class Power {
+public class DevicePower {
 
     @Column(name = "time")
     private Instant time;
     @Column(name = "meter_id", tag = true)
     private String meterId;
     @Column(name = "pa")
-    private String pa;
+    private Double pa;
     @Column(name = "pb")
-    private String pb;
+    private Double pb;
     @Column(name = "pc")
-    private String pc;
+    private Double pc;
 
 }

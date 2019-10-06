@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class PowerInfoVO {
     long time;
-    int power;
+    Double power;
 }

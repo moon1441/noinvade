@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class AllPowerVO {
-    private String power;
+    private Double power;
 }

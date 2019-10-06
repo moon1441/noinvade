@@ -9,6 +9,6 @@ public class FamilyVO {
     String info;
     int eventType; //0没事件，1开机告警，2关机告警
     long eventTime;
-    String power;
+    Double power;
 
 }
