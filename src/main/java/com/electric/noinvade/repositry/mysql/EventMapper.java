@@ -24,6 +24,6 @@ public interface EventMapper {
     void updateTimestamp(long time);
 
     @Select("select time_stamp from event_timestamp  where id=1")
-    long getTimestamp(long time);
+    long getTimestamp();
 
 }

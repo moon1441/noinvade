@@ -20,3 +20,12 @@ CREATE TABLE IF NOT EXISTS `event`(
     create_time DATETIME  NOT NULL DEFAULT NOW(),
     PRIMARY KEY (`account`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE `device_auth`;
+
+CREATE TABLE IF NOT EXISTS `device_auth`(
+    account varchar(10) NOT NULL,
+    device_auth_status int(11) NOT NULL,
+    device_type int(11) NOT NULL,
+    PRIMARY KEY (`account`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
