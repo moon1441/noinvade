@@ -4,9 +4,10 @@ import lombok.Data;
 
 @Data
 public class Event {
-    String buildingID;
+    String familyID;
     int alarmType;
     int deviceStatus;
     int deviceType;
+    int power;
     long time;
 }

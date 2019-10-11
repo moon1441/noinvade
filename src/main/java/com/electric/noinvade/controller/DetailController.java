@@ -5,6 +5,7 @@ import com.electric.noinvade.vo.AllPowerInfoVO;
 import com.electric.noinvade.vo.DevicePowerInfoVO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -15,7 +16,8 @@ public class DetailController {
 
     //实时总功率、日月总用电量、
     @RequestMapping(value="/all_power_info",method = RequestMethod.GET)
-    public List<AllPowerInfoVO> getAllPowerInfo(){
+    public List<AllPowerInfoVO> getAllPowerInfo(@RequestParam("id") String id){
+
         return null;
     }
 

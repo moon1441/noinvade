@@ -4,8 +4,6 @@ import java.util.Calendar;
 
 public class TimeUtil {
 
-    public static long nano = 1000000000L;
-
     private static void  clearTime(Calendar cal) {
         cal.set(cal.get(Calendar.YEAR),
                 cal.get(Calendar.MONTH),
@@ -17,14 +15,14 @@ public class TimeUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH,1);
         clearTime(calendar);
-        return calendar.getTimeInMillis()/1000*nano;
+        return calendar.getTimeInMillis();
     }
 
     public static long getDayZeroTime(int dayBefore){
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH,-dayBefore);
         clearTime(calendar);
-        return calendar.getTimeInMillis()/1000*nano;
+        return calendar.getTimeInMillis();
     }
 
     public static long getTodayHourTime(int hour){
@@ -32,7 +30,7 @@ public class TimeUtil {
         calendar.set(Calendar.HOUR_OF_DAY,hour);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
-        return calendar.getTimeInMillis()/1000*nano;
+        return calendar.getTimeInMillis();
     }
 
     public static int getHour(){

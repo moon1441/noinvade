@@ -1,23 +1,22 @@
 package com.electric.noinvade.controller;
 
-import com.electric.noinvade.bo.Building;
-import com.electric.noinvade.bo.TotalEPower;
-import com.electric.noinvade.bo.TotalPower;
+import com.electric.noinvade.bo.*;
 import com.electric.noinvade.repositry.influx.AllPowerMapper;
-import com.electric.noinvade.repositry.mysql.BuildingMapper;
+import com.electric.noinvade.repositry.influx.DevicePowerMapper;
+import com.electric.noinvade.repositry.mysql.FamilyMapper;
+import com.electric.noinvade.repositry.mysql.EventMapper;
+import com.electric.noinvade.util.DeviceTypeEnum;
 import com.electric.noinvade.util.TimeUtil;
-import com.electric.noinvade.vo.AllPowerInfoVO;
-import com.electric.noinvade.vo.DevicePowerInfoVO;
-import com.electric.noinvade.vo.FamilyVO;
+import com.electric.noinvade.vo.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +30,32 @@ public class MainController {
     private AllPowerMapper allPowerMapper;
 
     @Autowired
-    private BuildingMapper buildingMapper;
+    private FamilyMapper familyMapper;
+
+    @Autowired
+    private EventMapper eventMapper;
+
+    @Autowired
+    private DevicePowerMapper devicePowerMapper;
 
     @RequestMapping(value="/all_family",method = RequestMethod.GET)
     public List<FamilyVO> getFamilies(){
         List<FamilyVO> familyVOS = Lists.newArrayList();
-        List<Building> allBuildings = buildingMapper.getAllBuildings();
-        allBuildings.forEach(building -> {
+        List<Family> allFamilies = familyMapper.getAllFamilies();
+        List<Event> eventList = eventMapper.getAllEvent();
+        allFamilies.forEach(family -> {
             FamilyVO vo = new FamilyVO();
-            vo.setHouseId(building.getId());
-            vo.setInfo(building.getDescription());
+            vo.setId(family.getId());
+            vo.setInfo(family.getDescription());
+            if(!CollectionUtils.isEmpty(eventList)) {
+                for (Event e : eventList) {
+                    if (e.getFamilyID().equals(family.getId())) {
+                        vo.setEventType(e.getAlarmType());
+                        vo.setEventTime(e.getTime());
+                        vo.setPower(e.getPower());
+                    }
+                }
+            }
             familyVOS.add(vo);
         });
         return familyVOS;
@@ -59,7 +74,7 @@ public class MainController {
 
         List<TotalPower> intervalPower = allPowerMapper.getDayCurrentPower(TimeUtil.getDayZeroTime(0));
         intervalPower.sort(Comparator.comparing(TotalPower::getTime));
-        Map<Long, Double> powerMap = intervalPower.stream().collect(Collectors.toMap(power -> power.getTime().toEpochMilli(), power -> power.getPower()));
+        Map<Long, Integer> powerMap = intervalPower.stream().collect(Collectors.toMap(power -> power.getTime().toEpochMilli(), TotalPower::getPower));
         allPowerInfoVO.setPowerMap(powerMap);
 
         Map<Long,Double> dayEPowerMap = Maps.newHashMap();
@@ -68,7 +83,7 @@ public class MainController {
             long after = TimeUtil.getTodayHourTime(i+1);
             List<TotalEPower> intervalEPower = allPowerMapper.getIntervalEPower(begin, after);
             if(!CollectionUtils.isEmpty(intervalEPower)){
-                dayEPowerMap.put(after/TimeUtil.nano,intervalEPower.get(0).getEPower());
+                dayEPowerMap.put(after,intervalEPower.get(0).getEPower());
             }
         }
         allPowerInfoVO.setDayEPower(dayEPowerMap);
@@ -78,7 +93,7 @@ public class MainController {
             long after = TimeUtil.getDayZeroTime(i-1);
             List<TotalEPower> intervalEPower = allPowerMapper.getIntervalEPower(begin, after);
             if(!CollectionUtils.isEmpty(intervalEPower)) {
-                monthEPowerMap.put(begin/TimeUtil.nano,intervalEPower.get(0).getEPower());
+                monthEPowerMap.put(begin,intervalEPower.get(0).getEPower());
             }
         }
         allPowerInfoVO.setMonthEPower(monthEPowerMap);
@@ -86,12 +101,56 @@ public class MainController {
     }
 
     @RequestMapping(value="/all_device_power_info",method = RequestMethod.GET)
-    public List<DevicePowerInfoVO> getAllDevicePowerInfo(long start, long end){
-        return null;
+    public Map<Integer,List<PowerInfoVO>> getAllDevicePowerInfo(@RequestParam("start") long start,
+                                                         @RequestParam("end")long end,
+                                                         @RequestParam("types") List<Integer> types){
+        StringBuilder typeString=new StringBuilder();
+        Map<Integer,List<PowerInfoVO>> powerInfoVOMap =Maps.newHashMap();
+        types.forEach(type -> {
+            typeString.append(type);
+            typeString.append(",");
+            List<PowerInfoVO> powerInfoVOS = Lists.newArrayList();
+            powerInfoVOMap.put(type, powerInfoVOS);
+        });
+        List<DevicePower> devicePowers = devicePowerMapper.getDevicePower(start, end, typeString.substring(0, typeString.length() - 1));
+
+
+        setPowerMap(powerInfoVOMap, devicePowers);
+        List<DevicePower> deviceSumPowers = devicePowerMapper.getSumDevicePower(start, end, typeString.substring(0, typeString.length() - 1));
+        List<PowerInfoVO> allPowerInfoVOS = Lists.newArrayList();
+        powerInfoVOMap.put(DeviceTypeEnum.ALL.getCode(), allPowerInfoVOS);
+        setPowerMap(powerInfoVOMap, deviceSumPowers);
+        return powerInfoVOMap;
+    }
+
+    private void setPowerMap(Map<Integer, List<PowerInfoVO>> powerInfoVOMap, List<DevicePower> deviceSumPowers) {
+        for(DevicePower devicePower : deviceSumPowers){
+            PowerInfoVO powerInfoVO= new PowerInfoVO();
+            powerInfoVO.setPower(devicePower.getPower());
+            powerInfoVO.setTime(devicePower.getTime().toEpochMilli());
+            powerInfoVOMap.get(devicePower.getType()).add(powerInfoVO);
+        }
     }
 
     @RequestMapping(value="/all_device_e_power_info",method = RequestMethod.GET)
-    public List<DevicePowerInfoVO> getAllDeviceEPowerInfo(long start, long end){
-        return null;
+    public Map<Integer,List<EPowerInfoVO>> getAllDeviceEPowerInfo(@RequestParam("start") long start,
+                                                                 @RequestParam("end")long end,
+                                                                 @RequestParam("types") List<Integer> types){
+        StringBuilder typeString=new StringBuilder();
+        Map<Integer,List<EPowerInfoVO>> powerInfoVOMap =Maps.newHashMap();
+        types.forEach(type -> {
+            typeString.append(type);
+            typeString.append(",");
+            List<EPowerInfoVO> powerInfoVOS = Lists.newArrayList();
+            powerInfoVOMap.put(type, powerInfoVOS);
+        });
+        List<DeviceEPower> devicePowers = devicePowerMapper.getDeviceEPower(start, end, typeString.substring(0, typeString.length() - 1));
+        for(DeviceEPower deviceEPower : devicePowers){
+            EPowerInfoVO powerInfoVO= new EPowerInfoVO();
+            powerInfoVO.setEPower(deviceEPower.getPower());
+            powerInfoVO.setTime(deviceEPower.getTime().toEpochMilli());
+            powerInfoVOMap.get(deviceEPower.getType()).add(powerInfoVO);
+        }
+        return powerInfoVOMap;
     }
 }

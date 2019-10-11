@@ -12,5 +12,5 @@ public class TotalEPower {
     @Column(name = "time")
     private Instant time;
     @Column(name = "sum", tag = true)
-    private Double ePower;
+    private double ePower;
 }

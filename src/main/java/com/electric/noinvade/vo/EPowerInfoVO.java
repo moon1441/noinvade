@@ -3,7 +3,7 @@ package com.electric.noinvade.vo;
 import lombok.Data;
 
 @Data
-public class PowerInfoVO {
+public class EPowerInfoVO {
     long time;
-    int power;
+    double ePower;
 }

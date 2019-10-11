@@ -13,7 +13,7 @@ public interface AllPowerMapper {
     List<TotalPower> getAllCurrentPower();
 
     //当天实时总功率（曲线）
-    @InfluxQuery("select * from raw_overall_10s where time > ? order by time desc")
+    @InfluxQuery("select * from raw_overall_10s where time > ? order by time asc")
     List<TotalPower> getDayCurrentPower(long startTime);
 
     //所有用户累计电量

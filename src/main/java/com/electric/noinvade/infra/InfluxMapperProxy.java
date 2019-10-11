@@ -15,6 +15,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
 
@@ -42,7 +43,7 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
                 sql=sql.replaceFirst("\\?",String.valueOf(args[paramIndex]));
                 paramIndex++;
             }
-            QueryResult queryResult = influxDB.query(new Query(sql));
+            QueryResult queryResult = influxDB.query(new Query(sql), TimeUnit.MILLISECONDS);
             InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
             if(method.getReturnType() == java.util.List.class) {
                 // 如果是List类型，得到其Generic的类型

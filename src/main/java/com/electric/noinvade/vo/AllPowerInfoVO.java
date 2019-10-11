@@ -6,10 +6,10 @@ import java.util.Map;
 
 @Data
 public class AllPowerInfoVO {
-    Double totalPower;
-    Double totalDayEPower;
-    Double totalMonthEPower;
-    Map<Long,Double> powerMap;
+    int totalPower;
+    double totalDayEPower;
+    double totalMonthEPower;
+    Map<Long,Integer> powerMap;
     Map<Long,Double> dayEPower;
     Map<Long,Double> monthEPower;
 }

@@ -6,15 +6,19 @@ import org.influxdb.annotation.Measurement;
 
 import java.time.Instant;
 
-@Measurement(name = "device_type_10s")
+@Measurement(name = "device_ep_1h")
 @Data
-//某设备实时功率
-public class DevicePower {
+//某户某设备实时功率
+public class FamilyDeviceEPower {
 
     @Column(name = "time")
     private Instant time;
-    @Column(name = "p")
-    private int power;
+    @Column(name = "meter_id")
+    private String meterId;
+    @Column(name = "phase")
+    private String phase;
+    @Column(name = "ep")
+    private double power;
     @Column(name = "type")
     private int type;
 

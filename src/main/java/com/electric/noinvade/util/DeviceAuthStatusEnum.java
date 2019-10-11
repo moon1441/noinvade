@@ -1,15 +1,9 @@
 package com.electric.noinvade.util;
 
-public enum  DeviceTypeEnum  {
+public enum DeviceAuthStatusEnum {
 
-    FRIDGE(1,"冰箱"),
-    WASHER(2,"洗衣机"),
-    AIR_CONDITIONER(3,"空调"),
-    RICE_COOKER(4,"电饭煲"),
-    MICROWAVE(5,"微波炉"),
-    HOT_WATER_BOTTLE(6,"热水器"),
-    UNDEFINED(7,"其他设备"),
-    ALL(0,"汇总");
+    AUTH(0,"授权"),
+    UN_AUTH(1,"未授权");
 
     public String getName() {
         return name;
@@ -31,13 +25,13 @@ public enum  DeviceTypeEnum  {
     private int code;
 
 
-    DeviceTypeEnum(int code, String name) {
+    DeviceAuthStatusEnum(int code, String name) {
         this.name=name;
         this.code=code;
     }
 
     public static String getName(int code){
-        for(DeviceTypeEnum deviceTypeEnum : DeviceTypeEnum.values()){
+        for(DeviceAuthStatusEnum deviceTypeEnum : DeviceAuthStatusEnum.values()){
             if(code == deviceTypeEnum.code){
                 return deviceTypeEnum.name;
             }
