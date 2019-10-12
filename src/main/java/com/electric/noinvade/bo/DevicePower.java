@@ -16,6 +16,6 @@ public class DevicePower {
     @Column(name = "p")
     private int power;
     @Column(name = "type")
-    private int type;
+    private String type;
 
 }

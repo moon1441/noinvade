@@ -23,6 +23,6 @@ public class InfluxEvent {
     @Column(name = "phase")
     private String phase;
     @Column(name = "type")
-    private int type;
+    private String type;
 
 }

@@ -38,4 +38,12 @@ public enum DeviceAuthStatusEnum {
         }
         return null;
     }
+    public static int getCode(String name){
+        for(DeviceAuthStatusEnum deviceTypeEnum : DeviceAuthStatusEnum.values()){
+            if(name == deviceTypeEnum.name){
+                return deviceTypeEnum.code;
+            }
+        }
+        return 0;
+    }
 }

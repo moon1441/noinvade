@@ -16,10 +16,10 @@ public class FamilyEPower {
     @Column(name = "meter_id")
     private String meterId;
     @Column(name = "epa")
-    private double pa;
+    private double epa;
     @Column(name = "epb")
-    private double pb;
+    private double epb;
     @Column(name = "epc")
-    private double pc;
+    private double epc;
 
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface DeviceAuthMapper {
 
-    @Select("SELECT * FROM device_auth where account=#{familyID} and auth_time<=time order by auth_time desc limit 1")
+    @Select("SELECT * FROM device_auth where account=#{familyID} and auth_time<=#{time} order by auth_time desc limit 1")
     @Results({
             @Result(property = "type", column = "device_type"),
             @Result(property = "status", column = "device_auth_status"),

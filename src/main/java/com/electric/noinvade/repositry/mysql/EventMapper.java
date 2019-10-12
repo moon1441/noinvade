@@ -27,8 +27,8 @@ public interface EventMapper {
     )
     List<Event> getAllEvent();
 
-    @Insert("INSERT INTO event(account,alarm_type,device_status,device_type,time_stamp) " +
-            "VALUES(#{id}, #{alarmType}, #{deviceStatus},#{deviceType},#{time})")
+    @Insert("INSERT INTO event(account,alarm_type,device_status,device_type,time_stamp,power) " +
+            "VALUES(#{familyID}, #{alarmType}, #{deviceStatus},#{deviceType},#{time},#{power})")
     void insert(Event event);
 
     @Update("update  event_timestamp set time_stamp=#{time} where id=1")

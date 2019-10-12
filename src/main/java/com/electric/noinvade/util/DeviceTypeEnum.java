@@ -44,4 +44,12 @@ public enum  DeviceTypeEnum  {
         }
         return null;
     }
+    public static int getCode(String name){
+        for(DeviceTypeEnum deviceTypeEnum : DeviceTypeEnum.values()){
+            if(name == deviceTypeEnum.name){
+                return deviceTypeEnum.code;
+            }
+        }
+        return 0;
+    }
 }

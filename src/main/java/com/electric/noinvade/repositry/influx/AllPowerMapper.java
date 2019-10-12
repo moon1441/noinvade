@@ -13,14 +13,14 @@ public interface AllPowerMapper {
     List<TotalPower> getAllCurrentPower();
 
     //当天实时总功率（曲线）
-    @InfluxQuery("select * from raw_overall_10s where time > ? order by time asc")
+    @InfluxQuery("select * from raw_overall_10s where time > ?ms order by time asc")
     List<TotalPower> getDayCurrentPower(long startTime);
 
     //所有用户累计电量
-    @InfluxQuery("select sum(ep) from ep_overall_1h where time > ?")
+    @InfluxQuery("select sum(ep) from ep_overall_1h where time > ?ms")
     List<TotalEPower> getAllEPower(long startTime);
 
     //所有用户区间累计电量
-    @InfluxQuery("select sum(ep) from ep_overall_1h where time > ? and time <=?")
+    @InfluxQuery("select sum(ep) from ep_overall_1h where time > ?ms and time <=?ms")
     List<TotalEPower> getIntervalEPower(long startTime,long endTime);
 }

@@ -38,4 +38,12 @@ public enum AlarmTypeEnum {
         }
         return null;
     }
+    public static int getCode(String name){
+        for(AlarmTypeEnum deviceTypeEnum : AlarmTypeEnum.values()){
+            if(name == deviceTypeEnum.name){
+                return deviceTypeEnum.code;
+            }
+        }
+        return 0;
+    }
 }

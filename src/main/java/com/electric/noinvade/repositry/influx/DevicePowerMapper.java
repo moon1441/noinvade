@@ -10,19 +10,19 @@ import java.util.List;
 public interface DevicePowerMapper {
 
     //单设备实时功率
-    @InfluxQuery("select * from device_aggr_10s where time >now()-10s and type=? and meter_id=? and phase=? order by time desc limit 1")
-    List<FamilyDevicePower> getDeviceCurrentFamilyDevicePower(int type, String meterID, String phase);
+    @InfluxQuery("select * from device_aggr_10s where  type='?' and meter_id='?' and phase='?' and time >now()-10s order by time desc limit 1")
+    List<FamilyDevicePower> getDeviceCurrentFamilyDevicePower(String type, String meterID, String phase);
 
     //设备10s区间段功率信息，分type
-    @InfluxQuery("select * from device_type_10s where time>=? and time<? and type in (?)")
+    @InfluxQuery("select * from device_type_10s where time>=?ms and time<?ms and type in (?)")
     List<DevicePower> getDevicePower(long start, long end, String types);
 
     //设备10s区间段汇总功率信息
-    @InfluxQuery("select time,sum(p) as p from device_type_10s where time>=? and time<? and type in (?)")
+    @InfluxQuery("select time,sum(p) as p from device_type_10s where time>=?ms and time<?ms and type in (?)")
     List<DevicePower> getSumDevicePower(long start, long end, String types);
 
     //设备按日区间段电量信息
-    @InfluxQuery("select * from device_type_ep_1h where time>=? and time<? and type in (?)")
+    @InfluxQuery("select * from device_type_ep_1h where time>=?ms and time<?ms and type in (?)")
     List<DeviceEPower> getDeviceEPower(long start, long end, String types);
 
     //所有用户日月累计

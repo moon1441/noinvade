@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
 
     private InfluxDB influxDB;
+    private String database;
 
     {
         Properties prop = new Properties();
@@ -32,6 +33,7 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
         }
         influxDB = InfluxDBFactory.connect(prop.getProperty("url"));
         influxDB.setDatabase(prop.getProperty("db"));
+        database=prop.getProperty("db");
     }
     @Override
     public Object invoke(Object o, Method method, Object[] args) throws Throwable {
@@ -43,7 +45,7 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
                 sql=sql.replaceFirst("\\?",String.valueOf(args[paramIndex]));
                 paramIndex++;
             }
-            QueryResult queryResult = influxDB.query(new Query(sql), TimeUnit.MILLISECONDS);
+            QueryResult queryResult = influxDB.query(new Query(sql,database), TimeUnit.MILLISECONDS);
             InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
             if(method.getReturnType() == java.util.List.class) {
                 // 如果是List类型，得到其Generic的类型
