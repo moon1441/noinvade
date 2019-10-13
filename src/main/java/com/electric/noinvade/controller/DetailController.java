@@ -1,8 +1,13 @@
 package com.electric.noinvade.controller;
 
+import com.electric.noinvade.bo.TotalEPower;
+import com.electric.noinvade.bo.TotalPower;
+import com.electric.noinvade.repositry.influx.DevicePowerMapper;
+import com.electric.noinvade.util.TimeUtil;
 import com.electric.noinvade.vo.AlarmInfoVO;
 import com.electric.noinvade.vo.AllPowerInfoVO;
 import com.electric.noinvade.vo.DevicePowerInfoVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,10 +19,20 @@ import java.util.List;
 @RequestMapping(value="/family")
 public class DetailController {
 
-    //实时总功率、日月总用电量、
+    @Autowired
+    private DevicePowerMapper devicePowerMapper;
+
+    //实时总功率、日月总用电量
     @RequestMapping(value="/all_power_info",method = RequestMethod.GET)
     public List<AllPowerInfoVO> getAllPowerInfo(@RequestParam("id") String id){
+        AllPowerInfoVO allPowerInfoVO = new AllPowerInfoVO();
 
+        TotalPower totalPower = devicePowerMapper.getAllCurrentPower().get(0);
+        TotalEPower dayTotalEPower = allPowerMapper.getAllEPower(TimeUtil.getDayZeroTime(0)).get(0);
+        TotalEPower monthTotalEPower = allPowerMapper.getAllEPower(TimeUtil.getMonthFirstDay()).get(0);
+        allPowerInfoVO.setTotalPower(totalPower.getPower());
+        allPowerInfoVO.setTotalDayEPower(dayTotalEPower.getEPower());
+        allPowerInfoVO.setTotalMonthEPower(monthTotalEPower.getEPower());
         return null;
     }
 
