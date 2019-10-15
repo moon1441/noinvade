@@ -13,17 +13,22 @@ public interface DevicePowerMapper {
     @InfluxQuery("select * from device_aggr_10s where  type='?' and meter_id='?' and phase='?' and time >now()-10s order by time desc limit 1")
     List<FamilyDevicePower> getDeviceCurrentFamilyDevicePower(String type, String meterID, String phase);
 
-    //设备10s区间段功率信息，分type
+
+    //设备区间段功率信息，分type
     @InfluxQuery("select * from device_type_10s where time>=?ms and time<?ms and type in (?)")
     List<DevicePower> getDevicePower(long start, long end, String types);
 
-    //设备10s区间段汇总功率信息
-    @InfluxQuery("select time,sum(p) as p from device_type_10s where time>=?ms and time<?ms and type in (?)")
+    //设备区间段汇总功率信息
+    @InfluxQuery("select time,type,sum(p) as power as p from device_type_10s where time>=?ms and time<?ms and type in (?) group by type")
     List<DevicePower> getSumDevicePower(long start, long end, String types);
 
     //设备按日区间段电量信息
     @InfluxQuery("select * from device_type_ep_1h where time>=?ms and time<?ms and type in (?)")
     List<DeviceEPower> getDeviceEPower(long start, long end, String types);
+
+    //设备按日区间段电量汇总信息
+    @InfluxQuery("select time,type,sum(ep) as power  from device_type_ep_1h where time>=?ms and time<?ms and type in (?) group by type")
+    List<DeviceEPower> getSumDeviceEPower(long start, long end, String types);
 
     //所有用户日月累计
     @InfluxQuery("select * from raw_overall_10s where time >now() -100s order by time desc limit 1")

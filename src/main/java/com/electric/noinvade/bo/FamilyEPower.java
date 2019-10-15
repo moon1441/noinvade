@@ -15,11 +15,7 @@ public class FamilyEPower {
     private Instant time;
     @Column(name = "meter_id")
     private String meterId;
-    @Column(name = "epa")
-    private double epa;
-    @Column(name = "epb")
-    private double epb;
-    @Column(name = "epc")
-    private double epc;
+    @Column(name = "power")
+    private double power;
 
 }
