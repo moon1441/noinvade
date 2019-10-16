@@ -72,6 +72,7 @@ public class EventService {
                 e.setAlarmType(AlarmTypeEnum.NORMAL.getCode());
             }
 
+            //TODO 有点问题 power没取到，也不是取的那一个时刻的pwoer
             List<FamilyDevicePower> deviceCurrentFamilyDevicePower = devicePowerMapper.getDeviceCurrentFamilyDevicePower(event.getType(), event.getMeterID(), event.getPhase());
             if(!CollectionUtils.isEmpty(deviceCurrentFamilyDevicePower)){
                 e.setPower(deviceCurrentFamilyDevicePower.get(0).getPower());

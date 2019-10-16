@@ -152,6 +152,7 @@ public class DetailController {
             vo.setDeviceType(e.getDeviceType());
             vo.setPower(e.getPower());
             vo.setTime(e.getTime());
+            alarmInfoVOS.add(vo);
         });
         return alarmInfoVOS;
     }

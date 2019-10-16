@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface EventMapper {
 
-    @Select("SELECT * FROM event where account=#{familyID} order by time_stamp desc limit #{pageSize},#{pageNum}")
+    @Select("SELECT * FROM event where account=#{familyID} order by time_stamp desc limit #{pageNum},#{pageSize}")
     @Results({
-            @Result(property = "id", column = "account"),
+            @Result(property = "familyID", column = "account"),
             @Result(property = "alarmType", column = "alarm_type"),
             @Result(property = "deviceStatus", column = "device_status"),
             @Result(property = "deviceType", column = "device_type"),
@@ -19,7 +19,7 @@ public interface EventMapper {
 
     @Select("SELECT * FROM event where alarm_type=1 order by time_stamp asc")
     @Results({
-            @Result(property = "id", column = "account"),
+            @Result(property = "familyID", column = "account"),
             @Result(property = "alarmType", column = "alarm_type"),
             @Result(property = "deviceStatus", column = "device_status"),
             @Result(property = "deviceType", column = "device_type"),
