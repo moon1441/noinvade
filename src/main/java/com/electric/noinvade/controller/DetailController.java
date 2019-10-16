@@ -97,7 +97,7 @@ public class DetailController {
         Map<Integer,List<EPowerInfoVO>> powerInfoVOMap =Maps.newHashMap();
         types.forEach(type -> {
             typeString.append(type);
-            typeString.append(",");
+            typeString.append("|");
             List<EPowerInfoVO> powerInfoVOS = Lists.newArrayList();
             powerInfoVOMap.put(type, powerInfoVOS);
         });
@@ -111,7 +111,11 @@ public class DetailController {
             EPowerInfoVO powerInfoVO= new EPowerInfoVO();
             powerInfoVO.setEPower(devicePower.getPower());
             powerInfoVO.setTime(devicePower.getTime().toEpochMilli());
-            powerInfoVOMap.get(devicePower.getType()).add(powerInfoVO);
+            if( CollectionUtils.isEmpty(powerInfoVOMap.get(Integer.valueOf(devicePower.getType()))) ){
+                List<EPowerInfoVO> powerInfoVOS = Lists.newArrayList();
+                powerInfoVOMap.put(Integer.valueOf(devicePower.getType()),powerInfoVOS);
+            }
+            powerInfoVOMap.get(Integer.valueOf(devicePower.getType())).add(powerInfoVO);
         }
     }
 

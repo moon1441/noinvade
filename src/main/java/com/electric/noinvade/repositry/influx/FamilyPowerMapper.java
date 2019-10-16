@@ -25,12 +25,12 @@ public interface FamilyPowerMapper {
 
 
     //户内设备按日区间段电量汇总信息
-    @InfluxQuery("select time,type,sum(ep?) as power from device_ep_1h where time>=?ms and time<?ms  and meter_id=?  and type in (?) group by type")
+    @InfluxQuery("select sum(ep?) as power from device_ep_1h where time>=?ms and time<?ms  and meter_id=?  and  type =~ /?/ group by type")
     List<FamilyDeviceEPower> getSumFamilyDeviceEPower(String phase,long start, long end,String meterID, String types);
 
 
     //户内设备区间段汇总功率信息
-    @InfluxQuery("select time,meter_id,p? as power from device_aggr_10s where time>=?ms and time<?ms and meter_id=? and type in (?)")
+    @InfluxQuery("select time,meter_id,p? as power from device_aggr_10s where time>=?ms and time<?ms and meter_id=? and  type =~ /?/")
     List<FamilyDevicePower> getFamilyDevicePower(String phase,long start, long end,String meterID,String types);
 
 }

@@ -15,7 +15,7 @@ public class DevicePower {
     private Instant time;
     @Column(name = "p")
     private int power;
-    @Column(name = "type")
+    @Column(name = "type",tag = true)
     private String type;
 
 }

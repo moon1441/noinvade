@@ -15,19 +15,19 @@ public interface DevicePowerMapper {
 
 
     //设备区间段功率信息，分type
-    @InfluxQuery("select * from device_type_10s where time>=?ms and time<?ms and type in (?)")
+    @InfluxQuery("select * from device_type_10s where time>=?ms and time<?ms and type =~ /?/")
     List<DevicePower> getDevicePower(long start, long end, String types);
 
     //设备区间段汇总功率信息
-    @InfluxQuery("select time,type,sum(p) as power as p from device_type_10s where time>=?ms and time<?ms and type in (?) group by type")
+    @InfluxQuery("select sum(p) as power from device_type_10s where time>=?ms and time<?ms and type =~ /?/ group by type")
     List<DevicePower> getSumDevicePower(long start, long end, String types);
 
     //设备按日区间段电量信息
-    @InfluxQuery("select * from device_type_ep_1h where time>=?ms and time<?ms and type in (?)")
+    @InfluxQuery("select * from device_type_ep_1h where time>=?ms and time<?ms and  type =~ /?/")
     List<DeviceEPower> getDeviceEPower(long start, long end, String types);
 
     //设备按日区间段电量汇总信息
-    @InfluxQuery("select time,type,sum(ep) as power  from device_type_ep_1h where time>=?ms and time<?ms and type in (?) group by type")
+    @InfluxQuery("select sum(ep) as power from device_type_ep_1h where time>=?ms and time<?ms and  type =~ /?/ group by type")
     List<DeviceEPower> getSumDeviceEPower(long start, long end, String types);
 
     //所有用户日月累计
