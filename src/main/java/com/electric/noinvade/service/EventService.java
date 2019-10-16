@@ -60,23 +60,18 @@ public class EventService {
             e.setDeviceType(Integer.valueOf(event.getType()));
             e.setDeviceStatus(DeviceStatusEnum.getCode(event.getAction()));
             boolean hit=false;
-            List<DeviceAuth> deviceAuthList = deviceAuthMapper.getAuthByFamilyID(family.getId(),e.getTime());
-            if (CollectionUtils.isEmpty(deviceAuthList)) {
+            DeviceAuth deviceAuth = deviceAuthMapper.getAuthSnapshotByTime(family.getId(),e.getDeviceType(),e.getTime());
+            if (deviceAuth==null) {
                 e.setAlarmType(AlarmTypeEnum.NORMAL.getCode());
                 hit=true;
             }
-            if(!hit) {
-                for (DeviceAuth deviceAuth : deviceAuthList) {
-                    if (deviceAuth.getType() == Integer.valueOf(event.getType())
+            if(!hit && deviceAuth.getType() == Integer.valueOf(event.getType())
                             && deviceAuth.getStatus() == DeviceAuthStatusEnum.UN_AUTH.getCode()) {
-                        e.setAlarmType(AlarmTypeEnum.EXCEPTION.getCode());
-                        hit = true;
-                    }
-                }
-                if (!hit) {
-                    e.setAlarmType(AlarmTypeEnum.NORMAL.getCode());
-                }
+                e.setAlarmType(AlarmTypeEnum.EXCEPTION.getCode());
+            }else {
+                e.setAlarmType(AlarmTypeEnum.NORMAL.getCode());
             }
+
             List<FamilyDevicePower> deviceCurrentFamilyDevicePower = devicePowerMapper.getDeviceCurrentFamilyDevicePower(event.getType(), event.getMeterID(), event.getPhase());
             if(!CollectionUtils.isEmpty(deviceCurrentFamilyDevicePower)){
                 e.setPower(deviceCurrentFamilyDevicePower.get(0).getPower());

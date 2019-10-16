@@ -8,6 +8,6 @@ public class AlarmInfoVO {
     int deviceStatus;
     long time;
     int deviceType;
-    String power;
+    int power;
 
 }

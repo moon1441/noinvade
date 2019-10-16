@@ -3,18 +3,22 @@ package com.electric.noinvade.controller;
 import com.electric.noinvade.bo.*;
 import com.electric.noinvade.repositry.influx.DevicePowerMapper;
 import com.electric.noinvade.repositry.influx.FamilyPowerMapper;
+import com.electric.noinvade.repositry.mysql.DeviceAuthMapper;
+import com.electric.noinvade.repositry.mysql.EventMapper;
 import com.electric.noinvade.repositry.mysql.FamilyMapper;
 import com.electric.noinvade.util.TimeUtil;
 import com.electric.noinvade.vo.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +36,12 @@ public class DetailController {
 
     @Autowired
     private FamilyMapper familyMapper;
+
+    @Autowired
+    private EventMapper eventMapper;
+
+    @Autowired
+    private DeviceAuthMapper deviceAuthMapper;
 
 
     //实时总功率、日月总用电量、
@@ -129,18 +139,54 @@ public class DetailController {
     public List<AlarmInfoVO> getAllDeviceEventDetail(@RequestParam("pagenum")int pagenum,
                                                      @RequestParam("pagesize")int pagesize,
                                                      @RequestParam("id")String id){
-        return null;
+        List<Event> event = eventMapper.getEvent(id, pagesize, pagenum);
+        List<AlarmInfoVO> alarmInfoVOS = new ArrayList<>();
+        event.stream().forEach(e->{
+            AlarmInfoVO vo = new AlarmInfoVO();
+            vo.setAlarmType(e.getAlarmType());
+            vo.setDeviceStatus(e.getDeviceStatus());
+            vo.setDeviceType(e.getDeviceType());
+            vo.setPower(e.getPower());
+            vo.setTime(e.getTime());
+        });
+        return alarmInfoVOS;
     }
 
     //设备白名单
     @RequestMapping(value="/device_auth_info",method = RequestMethod.GET)
-    public List<Integer> getAllDeviceAuth(String houseId){
-        return null;
+    //返回授权信息，key是type（1-7），value是状态
+    public Map<Integer,Integer> getAllDeviceAuth(@RequestParam("id")String id){
+        List<DeviceAuth> deviceAuths = deviceAuthMapper.getAuthByFamilyID(id);
+        Map<Integer,Integer> result = Maps.newHashMap();
+        for(int i=1;i<=7;i++){
+            result.put(i,1);
+            for(DeviceAuth deviceAuth: deviceAuths){
+                if(deviceAuth.getType() == i){
+                    result.put(i,deviceAuth.getStatus());
+                }
+            }
+        }
+        return result;
     }
 
     //设备加白
     @RequestMapping(value="/device_auth",method = RequestMethod.POST)
-    public List<Integer> getAllDeviceAuth(String houseId,int type){
-        return null;
+    @Transactional
+    public boolean setAllDeviceAuth(@RequestParam("id")String id,
+                                          @RequestParam("type") int type,
+                                          @RequestParam("status") int status){
+        DeviceAuth deviceAuth = deviceAuthMapper.getAuthSnapshotByTime(id, type, System.currentTimeMillis());
+        if(deviceAuth!=null){
+            deviceAuth.setStatus(status);
+            deviceAuthMapper.update(deviceAuth);
+        }else{
+            deviceAuth = new DeviceAuth();
+            deviceAuth.setStatus(status);
+            deviceAuth.setFamilyID(id);
+            deviceAuth.setType(type);
+            deviceAuthMapper.insert(deviceAuth);
+        }
+        deviceAuthMapper.insertSnapshot(deviceAuth.getFamilyID(),deviceAuth.getType(),deviceAuth.getStatus(),System.currentTimeMillis());
+        return true;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EventMapper {
 
-    @Select("SELECT * FROM event where account=#{familyID}")
+    @Select("SELECT * FROM event where account=#{familyID} order by time_stamp desc limit #{pageSize},#{pageNum}")
     @Results({
             @Result(property = "id", column = "account"),
             @Result(property = "alarmType", column = "alarm_type"),
@@ -15,7 +15,7 @@ public interface EventMapper {
             @Result(property = "deviceType", column = "device_type"),
             @Result(property = "time", column = "time_stamp")}
     )
-    List<Event> getEvent(String familyID);
+    List<Event> getEvent(String familyID,int pageSize,int pageNum);
 
     @Select("SELECT * FROM event where alarm_type=1 order by time_stamp asc")
     @Results({
@@ -25,7 +25,7 @@ public interface EventMapper {
             @Result(property = "deviceType", column = "device_type"),
             @Result(property = "time", column = "time_stamp")}
     )
-    List<Event> getAllEvent();
+    List<Event> getAllAlarmEvent();
 
     @Insert("INSERT INTO event(account,alarm_type,device_status,device_type,time_stamp,power) " +
             "VALUES(#{familyID}, #{alarmType}, #{deviceStatus},#{deviceType},#{time},#{power})")

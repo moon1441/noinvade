@@ -42,7 +42,7 @@ public class MainController {
     public List<FamilyVO> getFamilies(){
         List<FamilyVO> familyVOS = Lists.newArrayList();
         List<Family> allFamilies = familyMapper.getAllFamilies();
-        List<Event> eventList = eventMapper.getAllEvent();
+        List<Event> eventList = eventMapper.getAllAlarmEvent();
         allFamilies.forEach(family -> {
             FamilyVO vo = new FamilyVO();
             vo.setId(family.getId());
