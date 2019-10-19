@@ -2,8 +2,8 @@ package com.electric.noinvade.util;
 
 public enum DeviceStatusEnum{
 
-    OPEN(0,"开机"),
-    CLOSED(1,"关机/待机");
+    OPEN(1,"开机"),
+    CLOSED(0,"关机/待机");
 
     public String getName() {
         return name;

@@ -10,8 +10,8 @@ import java.util.List;
 public interface DevicePowerMapper {
 
     //单设备实时功率
-    @InfluxQuery("select * from device_aggr_10s where  type='?' and meter_id='?' and phase='?' and time >now()-10s order by time desc limit 1")
-    List<FamilyDevicePower> getDeviceCurrentFamilyDevicePower(String type, String meterID, String phase);
+    @InfluxQuery("select * from device_aggr_10s where  type='?' and meter_id='?' and phase='?' and time<=?ms order by time desc limit 1")
+    List<FamilyDevicePower> getDeviceCurrentFamilyDevicePower(String type, String meterID, String phase,long time);
 
 
     //设备区间段功率信息，分type

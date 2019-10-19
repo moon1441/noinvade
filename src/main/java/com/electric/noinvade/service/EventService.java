@@ -58,7 +58,7 @@ public class EventService {
             e.setFamilyID(family.getId());
             e.setTime(System.currentTimeMillis());
             e.setDeviceType(Integer.valueOf(event.getType()));
-            e.setDeviceStatus(DeviceStatusEnum.getCode(event.getAction()));
+            e.setDeviceStatus(event.getAction());
             boolean hit=false;
             DeviceAuth deviceAuth = deviceAuthMapper.getAuthSnapshotByTime(family.getId(),e.getDeviceType(),e.getTime());
             if (deviceAuth==null) {
@@ -73,7 +73,7 @@ public class EventService {
             }
 
             //TODO 有点问题 power没取到，也不是取的那一个时刻的pwoer
-            List<FamilyDevicePower> deviceCurrentFamilyDevicePower = devicePowerMapper.getDeviceCurrentFamilyDevicePower(event.getType(), event.getMeterID(), event.getPhase());
+            List<FamilyDevicePower> deviceCurrentFamilyDevicePower = devicePowerMapper.getDeviceCurrentFamilyDevicePower(event.getType(), event.getMeterID(), event.getPhase(),e.getTime());
             if(!CollectionUtils.isEmpty(deviceCurrentFamilyDevicePower)){
                 e.setPower(deviceCurrentFamilyDevicePower.get(0).getPower());
             }

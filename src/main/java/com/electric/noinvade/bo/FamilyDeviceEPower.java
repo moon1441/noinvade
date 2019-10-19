@@ -17,7 +17,7 @@ public class FamilyDeviceEPower {
     private String meterId;
     @Column(name = "phase")
     private String phase;
-    @Column(name = "ep")
+    @Column(name = "power")
     private double power;
     @Column(name = "type")
     private String type;

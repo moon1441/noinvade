@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `device_auth`(
     device_type int(11) NOT NULL,
     create_time DATETIME  NOT NULL DEFAULT NOW(),
     update_time DATETIME  NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (`account`)
+    UNIQUE KEY `account_device` (`account`,`device_type`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 
@@ -41,6 +41,5 @@ CREATE TABLE IF NOT EXISTS `device_auth_record`(
     device_type int(11) NOT NULL,
     auth_time bigint(11) NOT NULL,
     create_time DATETIME  NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (`account`),
-    UNIQUE KEY `account_device` (`account`,`device_type`)
+    INDEX `account_device` (`account`,`device_type`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
