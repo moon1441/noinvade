@@ -53,6 +53,7 @@ public class MainController {
                         vo.setEventType(e.getDeviceStatus());
                         vo.setEventTime(e.getTime());
                         vo.setPower(e.getPower());
+                        vo.setAlarm(true);
                     }
                 }
             }

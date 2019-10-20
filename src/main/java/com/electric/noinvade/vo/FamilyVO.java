@@ -10,5 +10,6 @@ public class FamilyVO {
     int eventType;
     long eventTime;
     int power;
+    boolean alarm=false;
 
 }
