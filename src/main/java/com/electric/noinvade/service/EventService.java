@@ -39,7 +39,7 @@ public class EventService {
     @Autowired
     private DeviceAuthMapper deviceAuthMapper;
 
-    @Scheduled(fixedRate = 5000,initialDelay = 10000)
+    @Scheduled(fixedRate = 60000,initialDelay = 10000)
     @Transactional
     public void scheduled(){
         long timestamp = eventMapper.getTimestamp();
