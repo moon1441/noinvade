@@ -19,7 +19,7 @@ public interface DevicePowerMapper {
     List<DevicePower> getDevicePower(long start, long end, String types);
 
     //设备区间段汇总功率信息
-    @InfluxQuery("select sum(p) as power from device_type_10s where time>=?ms and time<?ms and type =~ /?/ group by type")
+    @InfluxQuery("select time,sum(p) as power from device_type_10s where time>=?ms and time<?ms and type =~ /?/ group by type,time(1s)")
     List<DevicePower> getSumDevicePower(long start, long end, String types);
 
     //设备按日区间段电量信息

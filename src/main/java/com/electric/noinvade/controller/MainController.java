@@ -114,18 +114,10 @@ public class MainController {
             powerInfoVOMap.put(type, powerInfoVOS);
         });
         List<DevicePower> devicePowers = devicePowerMapper.getDevicePower(start, end, typeString.substring(0, typeString.length() - 1));
-
-
-        setPowerMap(powerInfoVOMap, devicePowers);
-        List<DevicePower> deviceSumPowers = devicePowerMapper.getSumDevicePower(start, end, typeString.substring(0, typeString.length() - 1));
+        List<DevicePower> devicePowersResults = devicePowers.stream().filter(devicePower -> types.contains(Integer.valueOf(devicePower.getType()))).collect(Collectors.toList());
         List<PowerInfoVO> allPowerInfoVOS = Lists.newArrayList();
         powerInfoVOMap.put(DeviceTypeEnum.ALL.getCode(), allPowerInfoVOS);
-        setPowerMap(powerInfoVOMap, deviceSumPowers);
-        return powerInfoVOMap;
-    }
-
-    private void setPowerMap(Map<Integer, List<PowerInfoVO>> powerInfoVOMap, List<DevicePower> deviceSumPowers) {
-        for(DevicePower devicePower : deviceSumPowers){
+        for(DevicePower devicePower : devicePowersResults){
             PowerInfoVO powerInfoVO= new PowerInfoVO();
             powerInfoVO.setPower(devicePower.getPower());
             powerInfoVO.setTime(devicePower.getTime().toEpochMilli());
@@ -135,7 +127,9 @@ public class MainController {
             }
             powerInfoVOMap.get(Integer.valueOf(devicePower.getType())).add(powerInfoVO);
         }
+        return powerInfoVOMap;
     }
+
 
     @RequestMapping(value="/all_device_e_power_info",method = RequestMethod.GET)
     public Map<Integer,List<EPowerInfoVO>> getAllDeviceEPowerInfo(@RequestParam("start") long start,
@@ -150,7 +144,8 @@ public class MainController {
             powerInfoVOMap.put(type, powerInfoVOS);
         });
         List<DeviceEPower> devicePowers = devicePowerMapper.getDeviceEPower(start, end, typeString.substring(0, typeString.length() - 1));
-        for(DeviceEPower deviceEPower : devicePowers){
+        List<DeviceEPower> devicePowersResults = devicePowers.stream().filter(devicePower -> types.contains(Integer.valueOf(devicePower.getType()))).collect(Collectors.toList());
+        for(DeviceEPower deviceEPower : devicePowersResults){
             EPowerInfoVO powerInfoVO= new EPowerInfoVO();
             powerInfoVO.setEPower(deviceEPower.getPower());
             powerInfoVO.setTime(deviceEPower.getTime().toEpochMilli());
