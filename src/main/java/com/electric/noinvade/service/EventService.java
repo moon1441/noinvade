@@ -58,7 +58,7 @@ public class EventService {
             e.setFamilyID(family.getId());
             e.setTime(System.currentTimeMillis());
             e.setDeviceType(Integer.valueOf(event.getType()));
-            e.setDeviceStatus(event.getAction());
+            e.setDeviceStatus(Integer.valueOf(event.getAction()));
             boolean hit=false;
             DeviceAuth deviceAuth = deviceAuthMapper.getAuthSnapshotByTime(family.getId(),e.getDeviceType(),e.getTime());
             if (deviceAuth==null) {

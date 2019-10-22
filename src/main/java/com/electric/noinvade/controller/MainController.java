@@ -66,12 +66,12 @@ public class MainController {
     public AllPowerInfoVO getAllPowerInfo(){
         AllPowerInfoVO allPowerInfoVO = new AllPowerInfoVO();
 
-        TotalPower totalPower = allPowerMapper.getAllCurrentPower().get(0);
-        TotalEPower dayTotalEPower = allPowerMapper.getAllEPower(TimeUtil.getDayZeroTime(0)).get(0);
-        TotalEPower monthTotalEPower = allPowerMapper.getAllEPower(TimeUtil.getMonthFirstDay()).get(0);
-        allPowerInfoVO.setTotalPower(totalPower.getPower());
-        allPowerInfoVO.setTotalDayEPower(dayTotalEPower.getEPower());
-        allPowerInfoVO.setTotalMonthEPower(monthTotalEPower.getEPower());
+        List<TotalPower> allCurrentPower = allPowerMapper.getAllCurrentPower();
+        List<TotalEPower> dayTotalEPower = allPowerMapper.getAllEPower(TimeUtil.getDayZeroTime(0));
+        List<TotalEPower> monthTotalEPower = allPowerMapper.getAllEPower(TimeUtil.getMonthFirstDay());
+        allPowerInfoVO.setTotalPower(CollectionUtils.isEmpty(allCurrentPower)?0:allCurrentPower.get(0).getPower());
+        allPowerInfoVO.setTotalDayEPower(CollectionUtils.isEmpty(dayTotalEPower)?0:dayTotalEPower.get(0).getEPower());
+        allPowerInfoVO.setTotalMonthEPower(CollectionUtils.isEmpty(monthTotalEPower)?0:monthTotalEPower.get(0).getEPower());
 
         List<TotalPower> intervalPower = allPowerMapper.getDayCurrentPower(TimeUtil.getDayZeroTime(0));
         intervalPower.sort(Comparator.comparing(TotalPower::getTime));

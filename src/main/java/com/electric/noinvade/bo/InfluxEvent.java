@@ -13,7 +13,7 @@ public class InfluxEvent {
     @Column(name = "time")
     private Instant time;
     @Column(name = "action")
-    private Integer action;
+    private String action;
     @Column(name = "device")
     private String device;
     @Column(name = "info")
