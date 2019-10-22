@@ -154,7 +154,10 @@ public class MainController {
             EPowerInfoVO powerInfoVO= new EPowerInfoVO();
             powerInfoVO.setEPower(deviceEPower.getPower());
             powerInfoVO.setTime(deviceEPower.getTime().toEpochMilli());
-            powerInfoVOMap.get(deviceEPower.getType()).add(powerInfoVO);
+            List<EPowerInfoVO> ePowerInfoVOS = powerInfoVOMap.get(Integer.valueOf(deviceEPower.getType()));
+            if (ePowerInfoVOS != null) {
+                ePowerInfoVOS.add(powerInfoVO);
+            }
         }
         return powerInfoVOMap;
     }
