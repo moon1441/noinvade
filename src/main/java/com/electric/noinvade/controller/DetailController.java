@@ -146,9 +146,10 @@ public class DetailController {
 
     //事件列表
     @RequestMapping(value="/device_event_detail",method = RequestMethod.GET)
-    public List<AlarmInfoVO> getAllDeviceEventDetail(@RequestParam("pagenum")int pagenum,
+    public PageAlarmInfoVO getAllDeviceEventDetail(@RequestParam("pagenum")int pagenum,
                                                      @RequestParam("pagesize")int pagesize,
                                                      @RequestParam("id")String id){
+        PageAlarmInfoVO pageAlarmInfoVO = new PageAlarmInfoVO();
         List<Event> event = eventMapper.getEvent(id, pagesize, pagenum);
         List<AlarmInfoVO> alarmInfoVOS = new ArrayList<>();
         event.stream().forEach(e->{
@@ -160,7 +161,25 @@ public class DetailController {
             vo.setTime(e.getTime());
             alarmInfoVOS.add(vo);
         });
-        return alarmInfoVOS;
+        pageAlarmInfoVO.setAllPowerInfos(alarmInfoVOS);
+        pageAlarmInfoVO.setTotalPage((int)Math.floor((double)eventMapper.getEventCount(id)/5));
+        return pageAlarmInfoVO;
+    }
+
+    //事件列表
+    @RequestMapping(value="/device_event_detail_by_type",method = RequestMethod.GET)
+    public AlarmInfoVO getAllDeviceEventDetail(@RequestParam("id")String id,
+                                                   @RequestParam("type")int type){
+        AlarmInfoVO alarmInfoVO = new AlarmInfoVO();
+        Event  e= eventMapper.getEventByType(id, type);
+        if(e!=null){
+            alarmInfoVO.setAlarmType(e.getAlarmType());
+            alarmInfoVO.setDeviceStatus(e.getDeviceStatus());
+            alarmInfoVO.setDeviceType(e.getDeviceType());
+            alarmInfoVO.setPower(e.getPower());
+            alarmInfoVO.setTime(e.getTime());
+        }
+        return alarmInfoVO;
     }
 
     //设备白名单

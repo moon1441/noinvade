@@ -17,6 +17,19 @@ public interface EventMapper {
     )
     List<Event> getEvent(String familyID,int pageSize,int pageNum);
 
+    @Select("SELECT * FROM event where account=#{familyID} and device_type=#{type} order by time_stamp desc limit 1")
+    @Results({
+            @Result(property = "familyID", column = "account"),
+            @Result(property = "alarmType", column = "alarm_type"),
+            @Result(property = "deviceStatus", column = "device_status"),
+            @Result(property = "deviceType", column = "device_type"),
+            @Result(property = "time", column = "time_stamp")}
+    )
+    Event getEventByType(String familyID,int type);
+
+    @Select("SELECT count(*) FROM event where account=#{familyID}")
+    int getEventCount(String familyID);
+
     @Select("SELECT * FROM event where alarm_type=1 order by time_stamp asc")
     @Results({
             @Result(property = "familyID", column = "account"),
