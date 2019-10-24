@@ -62,7 +62,7 @@ public class MainController {
         return familyVOS;
     }
 
-    @RequestMapping(value="/all_family",method = RequestMethod.GET)
+    @RequestMapping(value="/device_load",method = RequestMethod.GET)
     public Map<Integer,Integer> getDeviceLoad(){
         List<DeviceLoad> deviceLoad = devicePowerMapper.getDeviceLoad();
         Map<Integer,Integer> result=Maps.newHashMap();
