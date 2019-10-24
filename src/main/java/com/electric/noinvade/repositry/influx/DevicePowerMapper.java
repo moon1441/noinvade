@@ -1,6 +1,7 @@
 package com.electric.noinvade.repositry.influx;
 
 import com.electric.noinvade.bo.DeviceEPower;
+import com.electric.noinvade.bo.DeviceLoad;
 import com.electric.noinvade.bo.DevicePower;
 import com.electric.noinvade.bo.FamilyDevicePower;
 import com.electric.noinvade.infra.InfluxQuery;
@@ -8,6 +9,10 @@ import com.electric.noinvade.infra.InfluxQuery;
 import java.util.List;
 
 public interface DevicePowerMapper {
+
+    //设备负荷
+    @InfluxQuery("select * from device_num order by time desc limit 1")
+    List<DeviceLoad> getDeviceLoad();
 
     //单设备实时功率
     @InfluxQuery("select * from device_aggr_10s where  type='?' and meter_id='?' and phase='?' and time<=?ms order by time desc limit 1")

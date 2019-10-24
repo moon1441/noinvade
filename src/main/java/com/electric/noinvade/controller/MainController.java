@@ -62,6 +62,23 @@ public class MainController {
         return familyVOS;
     }
 
+    @RequestMapping(value="/all_family",method = RequestMethod.GET)
+    public Map<Integer,Integer> getDeviceLoad(){
+        List<DeviceLoad> deviceLoad = devicePowerMapper.getDeviceLoad();
+        Map<Integer,Integer> result=Maps.newHashMap();
+
+        if(!CollectionUtils.isEmpty(deviceLoad)){
+            result.put(1, deviceLoad.get(0).getNum1());
+            result.put(2, deviceLoad.get(0).getNum2());
+            result.put(3, deviceLoad.get(0).getNum3());
+            result.put(4, deviceLoad.get(0).getNum4());
+            result.put(5, deviceLoad.get(0).getNum5());
+            result.put(6, deviceLoad.get(0).getNum6());
+        }
+        return result;
+
+    }
+
     @RequestMapping(value="/all_power_info",method = RequestMethod.GET)
     public AllPowerInfoVO getAllPowerInfo(){
         AllPowerInfoVO allPowerInfoVO = new AllPowerInfoVO();
