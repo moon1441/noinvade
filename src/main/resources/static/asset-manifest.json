@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/static/css/main.156226d3.chunk.css",
+    "main.js": "/static/static/js/main.66ce96ed.chunk.js",
+    "main.js.map": "/static/static/js/main.66ce96ed.chunk.js.map",
+    "runtime-main.js": "/static/static/js/runtime-main.3c7fe497.js",
+    "runtime-main.js.map": "/static/static/js/runtime-main.3c7fe497.js.map",
+    "static/css/2.9c2fdd1c.chunk.css": "/static/static/css/2.9c2fdd1c.chunk.css",
+    "static/js/2.da6e9c02.chunk.js": "/static/static/js/2.da6e9c02.chunk.js",
+    "static/js/2.da6e9c02.chunk.js.map": "/static/static/js/2.da6e9c02.chunk.js.map",
+    "index.html": "/static/index.html",
+    "precache-manifest.085c3cd9369a2e88376406956055dab9.js": "/static/precache-manifest.085c3cd9369a2e88376406956055dab9.js",
+    "service-worker.js": "/static/service-worker.js",
+    "static/css/2.9c2fdd1c.chunk.css.map": "/static/static/css/2.9c2fdd1c.chunk.css.map",
+    "static/css/main.156226d3.chunk.css.map": "/static/static/css/main.156226d3.chunk.css.map",
+    "static/media/ac.png": "/static/static/media/ac.63d87aa0.png",
+    "static/media/index.scss": "/static/static/media/room-bg.b9288f32.png",
+    "static/media/fridge.png": "/static/static/media/fridge.0087b3ec.png",
+    "static/media/App.scss": "/static/static/media/title.0ceb6d39.png",
+    "static/media/washer.png": "/static/static/media/washer.7e9cea95.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3c7fe497.js",
+    "static/css/2.9c2fdd1c.chunk.css",
+    "static/js/2.da6e9c02.chunk.js",
+    "static/css/main.156226d3.chunk.css",
+    "static/js/main.66ce96ed.chunk.js"
+  ]
+}

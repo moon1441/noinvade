@@ -1,0 +1,12 @@
+<svg width="178" height="103" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter x="-.3%" y="-1.5%" width="100.6%" height="102%" filterUnits="objectBoundingBox" id="lhf">
+            <feOffset dy="-1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feComposite in="shadowOffsetOuter1" in2="SourceAlpha" operator="out" result="shadowOffsetOuter1"/>
+            <feColorMatrix values="0 0 0 0 0.954875235 0 0 0 0 0.961710989 0 0 0 0 0.138542295 0 0 0 1 0" in="shadowOffsetOuter1"/>
+        </filter>
+        <path id="lhp" d="M.38 32.447L120.445 102l56.925-31.17V37.968L120.444 69.45.381.5z"/>
+    </defs>
+    <use fill="#000" filter="url(#lhf)" xlink:href="#lhp"/>
+    <use fill-opacity=".55" fill="#F5A623" xlink:href="#lhp"/>
+</svg>
