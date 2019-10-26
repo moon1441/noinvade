@@ -23,17 +23,10 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
     private String database;
 
     {
-        Properties prop = new Properties();
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream(
-                "influxdb.properties");
-        try {
-            prop.load(in);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        influxDB = InfluxDBFactory.connect(prop.getProperty("url"));
-        influxDB.setDatabase(prop.getProperty("db"));
-        database=prop.getProperty("db");
+        Properties pp = System.getProperties();
+        influxDB = InfluxDBFactory.connect(pp.getProperty("influxUrl"));
+        influxDB.setDatabase(pp.getProperty("influxDBName"));
+        database=pp.getProperty("influxDBName");
     }
     @Override
     public Object invoke(Object o, Method method, Object[] args) throws Throwable {
