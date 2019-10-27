@@ -8,6 +8,8 @@
 
 3. 执行start.sh
 
+4. 如果用systemd管理服务，可基于noinvade-webapp.service文件进行修改，写入正确的start.sh所在位置即可。
+
 
 数据初始化步骤：
 

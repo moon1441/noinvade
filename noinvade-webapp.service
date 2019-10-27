@@ -1,0 +1,9 @@
+[Unit]
+Description=noinvade java web app
+After=network.target
+
+[Service]
+ExecStart=/home/ubuntu/noinvade/start.sh
+
+[Install]
+WantedBy=default.target
