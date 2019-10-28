@@ -49,7 +49,7 @@ public class DetailController {
     public AllPowerInfoVO getAllPowerInfo(@RequestParam("id") String id){
         AllPowerInfoVO allPowerInfoVO = new AllPowerInfoVO();
         Family family = familyMapper.getFamilyByID(id);
-        List<FamilyPower> familyCurrentPowerList = familyPowerMapper.getFamilyCurrentPower(family.getMeterID(),family.getPhase() );
+        List<FamilyPower> familyCurrentPowerList = familyPowerMapper.getFamilyCurrentPower(family.getPhase(),family.getMeterID());
         if(CollectionUtils.isEmpty(familyCurrentPowerList)) {
             allPowerInfoVO.setTotalPower(0);
         }else{
