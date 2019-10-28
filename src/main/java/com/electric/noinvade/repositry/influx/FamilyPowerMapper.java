@@ -12,7 +12,7 @@ public interface FamilyPowerMapper {
     List<FamilyPower> getFamilyCurrentPower(String phase,String meterID);
 
     //当天实时总功率（曲线）
-    @InfluxQuery("select time,meter_id,p? as power from raw_overall_10s where time > ?ms and meter_id='?' and phase='?' order by time asc")
+    @InfluxQuery("select time,meter_id,p? as power from raw_aggr_10s where time > ?ms and meter_id='?' and phase='?' order by time asc")
     List<FamilyPower> getFamilyDailyPower(String phase1,long startTime,String meterID,String phase2);
 
     //单用户累计电量
