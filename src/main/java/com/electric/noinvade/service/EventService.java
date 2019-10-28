@@ -58,7 +58,7 @@ public class EventService {
             Event e = new Event();
 
             e.setFamilyID(family.getId());
-            e.setTime(System.currentTimeMillis());
+            e.setTime(event.getTime().toEpochMilli());
             e.setDeviceType(Integer.valueOf(event.getType()));
             e.setDeviceStatus(Integer.valueOf(event.getAction()));
             boolean hit=false;

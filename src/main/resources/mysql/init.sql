@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `event_timestamp`(
     PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-INSERT INTO `event_timestamp` (`id`,`time_stamp`) values(1,1569575934000);
+INSERT INTO `event_timestamp` (`id`,`time_stamp`) values(1,1572192000000);
 
 DROP TABLE IF EXISTS  `event`;
 
