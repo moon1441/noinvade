@@ -83,7 +83,9 @@ public class EventService {
             return e;
 
         }).filter(obj -> !Objects.isNull(obj)).collect(Collectors.toList());
-        eventMapper.updateTimestamp(time_stamp.get());
+        if(timestamp<time_stamp.get()) {
+            eventMapper.updateTimestamp(time_stamp.get());
+        }
         if(!CollectionUtils.isEmpty(resultEvents)){
             for(Event e: resultEvents){
                 eventMapper.insert(e);
