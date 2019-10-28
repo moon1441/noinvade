@@ -72,7 +72,7 @@ public class DetailController {
 
         }
 
-        List<FamilyPower> familyDailyPower = familyPowerMapper.getFamilyDailyPower(family.getPhase(),TimeUtil.getDayZeroTime(0), family.getMeterID(),family.getPhase());
+        List<FamilyPower> familyDailyPower = familyPowerMapper.getFamilyDailyPower(family.getPhase(),TimeUtil.getDayZeroTime(0), family.getMeterID());
         familyDailyPower.sort(Comparator.comparing(FamilyPower::getTime));
         Map<Long, Integer> powerMap = familyDailyPower.stream().collect(Collectors.toMap(power -> power.getTime().toEpochMilli(), FamilyPower::getPower));
         allPowerInfoVO.setPowerMap(powerMap);
