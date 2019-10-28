@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
@@ -45,6 +46,7 @@ public class EventService {
         long timestamp = eventMapper.getTimestamp();
         long now = System.currentTimeMillis();
         List<InfluxEvent> events = influxEventMapper.getEventByTime(timestamp , now);
+        AtomicLong time_stamp=new AtomicLong(0L);
         List<Event> resultEvents = events.stream()
                 .filter(e-> Integer.valueOf(e.getType()) <=7)
                 .map(event -> {
@@ -77,10 +79,11 @@ public class EventService {
             if(!CollectionUtils.isEmpty(deviceCurrentFamilyDevicePower)){
                 e.setPower(deviceCurrentFamilyDevicePower.get(0).getPower());
             }
+            time_stamp.getAndSet(event.getTime().toEpochMilli()>time_stamp.get()?event.getTime().toEpochMilli():time_stamp.get());
             return e;
 
         }).filter(obj -> !Objects.isNull(obj)).collect(Collectors.toList());
-        eventMapper.updateTimestamp(System.currentTimeMillis());
+        eventMapper.updateTimestamp(time_stamp.get());
         if(!CollectionUtils.isEmpty(resultEvents)){
             for(Event e: resultEvents){
                 eventMapper.insert(e);
