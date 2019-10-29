@@ -25,7 +25,6 @@ public class StaticController {
 
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
-                .header("Content-Disposition", "attachment; filename=\"report.pdf\"")
                 .body(inputStream::transferTo);
 
         } catch (IOException e) {
