@@ -24,7 +24,11 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
 
     {
         Properties pp = System.getProperties();
-        influxDB = InfluxDBFactory.connect(pp.getProperty("influxUrl"));
+        if(pp.getProperty("influxUser")!=null && pp.getProperty("influxPsw")!=null) {
+            influxDB = InfluxDBFactory.connect(pp.getProperty("influxUrl"), pp.getProperty("influxUser"), pp.getProperty("influxPsw"));
+        }else{
+            influxDB =  InfluxDBFactory.connect(pp.getProperty("influxUrl"));
+        }
         influxDB.setDatabase(pp.getProperty("influxDBName"));
         database=pp.getProperty("influxDBName");
     }
