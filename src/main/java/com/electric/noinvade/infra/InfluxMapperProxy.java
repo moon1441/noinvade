@@ -5,6 +5,7 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,8 +25,10 @@ public class InfluxMapperProxy<T> implements InvocationHandler, Serializable {
 
     {
         Properties pp = System.getProperties();
-        if(pp.getProperty("influxUser")!=null && pp.getProperty("influxPsw")!=null) {
-            influxDB = InfluxDBFactory.connect(pp.getProperty("influxUrl"), pp.getProperty("influxUser"), pp.getProperty("influxPsw"));
+        String influxUser = pp.getProperty("influxUser");
+        String influxPsw = pp.getProperty("influxPsw");
+        if(!StringUtils.isEmpty(influxUser) && !StringUtils.isEmpty(influxPsw)) {
+            influxDB = InfluxDBFactory.connect(pp.getProperty("influxUrl"), influxUser, influxPsw);
         }else{
             influxDB =  InfluxDBFactory.connect(pp.getProperty("influxUrl"));
         }

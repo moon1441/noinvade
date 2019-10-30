@@ -11,6 +11,8 @@ MYSQL_PASSWD=admin
 INFLUX_HOST=192.168.50.8
 INFLUX_PORT=8086
 INFLUX_DB_NAME=nilm
+INFLUX_USER=
+INFLUX_PSW=
 
 BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 JAR_FILE="${BASE_DIR}/noinvade-1.0.0.jar"
@@ -29,7 +31,9 @@ cd ${BASE_DIR}
 ${JAVA_HOME}/bin/java \
     -Dserver.port=${SERVER_PORT} \
     -DinfluxUrl="http://${INFLUX_HOST}:${INFLUX_PORT}" \
-    -DinfluxDBName=nilm \
+    -DinfluxDBName=${INFLUX_DB_NAME} \
+    -DinfluxUser=${INFLUX_USER} \
+    -DinfluxPsw=${INFLUX_PSW} \
     -DmysqlUrl="jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_SCHEMA}" \
     -DmysqlUser=${MYSQL_USER} \
     -DmysqlPsw=${MYSQL_PASSWD} \
