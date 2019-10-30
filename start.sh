@@ -24,6 +24,8 @@ if [[ ! -e ${JAVA_HOME} ]] && [[ -e ${JAVA_PKG_NAME} ]]; then
     tar -C ${BASE_DIR} -xzf ${JAVA_PKG_NAME}
 fi
 
+cd ${BASE_DIR}
+
 ${JAVA_HOME}/bin/java \
     -Dserver.port=${SERVER_PORT} \
     -DinfluxUrl="http://${INFLUX_HOST}:${INFLUX_PORT}" \
