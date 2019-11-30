@@ -54,3 +54,18 @@ CREATE TABLE IF NOT EXISTS `device_auth_record`(
     create_time DATETIME  NOT NULL DEFAULT NOW(),
     INDEX `account_device` (`account`,`device_type`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+create table users(
+    username varchar(50) not null primary key,
+    password varchar(100) not null,
+    enabled boolean not null
+);
+
+create table authorities (
+    username varchar(50) not null,
+    authority varchar(50) not null,
+    unique key ix_auth_username (username, authority)
+);
+
+INSERT INTO users (username, password, enabled)
+VALUES ('admin', '$2a$10$GVubHGULgsIo5gnvccfiXedWMweU.KszZ9I0JOpNzu85wpz7wAY4e', 1);

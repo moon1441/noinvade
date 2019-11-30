@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 @Controller
 public class StaticController {
-    @GetMapping({"/", "/family-view"})
+    @GetMapping({"/", "/family-view", "/login"})
     public String index() {
         return "index";
     }
