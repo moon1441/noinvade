@@ -55,17 +55,17 @@ CREATE TABLE IF NOT EXISTS `device_auth_record`(
     INDEX `account_device` (`account`,`device_type`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-create table users(
-    username varchar(50) not null primary key,
-    password varchar(100) not null,
-    enabled boolean not null
+CREATE TABLE IF NOT EXISTS users(
+    username VARCHAR(50) NOT NULL PRIMARY KEY,
+    password VARCHAR(100) NOT NULL,
+    enabled BOOLEAN NOT NULL
 );
 
-create table authorities (
-    username varchar(50) not null,
-    authority varchar(50) not null,
-    unique key ix_auth_username (username, authority)
+CREATE TABLE IF NOT EXISTS authorities (
+    username VARCHAR(50) NOT NULL,
+    authority VARCHAR(50) NOT NULL,
+    UNIQUE KEY ix_auth_username (username, authority)
 );
 
-INSERT INTO users (username, password, enabled)
+INSERT IGNORE INTO users (username, password, enabled)
 VALUES ('admin', '$2a$10$GVubHGULgsIo5gnvccfiXedWMweU.KszZ9I0JOpNzu85wpz7wAY4e', 1);

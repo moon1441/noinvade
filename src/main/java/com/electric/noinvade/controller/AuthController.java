@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
@@ -38,6 +39,10 @@ public class AuthController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         try {
             request.logout();
+            Cookie cookie = new Cookie("JSESSIONID", "");
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
         } catch (ServletException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -45,10 +50,15 @@ public class AuthController {
 
     @PostMapping("/login")
     public void login(
+        @AuthenticationPrincipal UserDetails user,
         @RequestBody AuthFormVO form,
         HttpServletRequest request,
         HttpServletResponse response
     ) {
+        if (user != null) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
         try {
             request.login(form.getUsername(), form.getPassword());
             response.setStatus(HttpServletResponse.SC_ACCEPTED);
@@ -79,6 +89,7 @@ public class AuthController {
             Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
         userDetailsManager.createUser(user);
+        response.setStatus(HttpServletResponse.SC_CREATED);
         return UserDetailVO.fromUserDetails(user);
     }
 
