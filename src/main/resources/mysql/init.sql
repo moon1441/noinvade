@@ -69,3 +69,5 @@ CREATE TABLE IF NOT EXISTS authorities (
 
 INSERT IGNORE INTO users (username, password, enabled)
 VALUES ('admin', '$2a$10$GVubHGULgsIo5gnvccfiXedWMweU.KszZ9I0JOpNzu85wpz7wAY4e', 1);
+
+INSERT IGNORE INTO authorities (username, authority) VALUES ('admin', 'ROLE_USER');
